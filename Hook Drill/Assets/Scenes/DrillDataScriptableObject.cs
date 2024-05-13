@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/SpawnManagerScriptableObject", order = 1)]
 public class DrillDataScriptableObject : ScriptableObject
 {
     [Range(0f, 100f)]
@@ -24,7 +25,4 @@ public class DrillDataScriptableObject : ScriptableObject
     [SerializeField] float SpeedBoostForce;
     [Range(0f, 100f)]
     [SerializeField] float SpeedBoostCoolDown;
-
-
-
 }
