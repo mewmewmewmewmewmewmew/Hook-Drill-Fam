@@ -33,11 +33,11 @@ public class DrillDataScriptableObject : ScriptableObject
     [Range(0, 10)]
     [SerializeField] int RopeNumberOfJoints;
 
-    [Tooltip("This is the variable for amount of time the drill is boosted during a boost.")]
+    [Tooltip("This is the variable for the amount of time the drill is boosted during a boost.")]
     [Range(0f, 100f)]
     [SerializeField] float SpeedBoostDuration;
 
-    [Tooltip("This is the variable for amount of force used on the drill during a boost.")]
+    [Tooltip("This is the variable for the amount of force used on the drill during a boost.")]
     [Range(0f, 100f)]
     [SerializeField] float SpeedBoostForce;
 
