@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c95d1bd09257634990a66fb9fddbe5f, type: 3}
   m_Name: DrillFastVariant
   m_EditorClassIdentifier: 
-  AirDecceleration: 0
-  AirTurningMaxSpeed: 0
-  GroundAcceleration: 0
-  GroundTurningMaxSpeed: 0
-  Gravity: 0
-  RopeLength: 0
-  RopeNumberOfJoints: 0
-  SpeedBoostDuration: 0
-  SpeedBoostForce: 0
-  SpeedBoostCoolDown: 0
+  AirDecceleration: 7
+  AirTurningMaxSpeed: 15
+  GroundAcceleration: 10
+  GroundTurningMaxSpeed: 30
+  Gravity: 9.8
+  RopeLength: 8
+  RopeNumberOfJoints: 8
+  SpeedBoostDuration: 3
+  SpeedBoostForce: 100
+  SpeedBoostCoolDown: 4
