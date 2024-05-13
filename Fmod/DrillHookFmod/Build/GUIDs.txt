@@ -1,0 +1,8 @@
+{86273cbc-093f-4bf4-bd52-16b237a0abeb} bank:/Master
+{1e3a1c68-7844-07b6-3b1b-9c4cc653ad73} bank:/Master.strings
+{cdf04bca-5d07-4e40-8814-a89f0621e581} bus:/
+{7c79ee91-b4f0-4477-8884-ef696a50b78a} bus:/Reverb
+{f29b24c5-60c7-4e6d-89c3-1c4d2c485ce7} event:/Boost
+{cdccba61-f855-4be6-b2cc-26299fd132a7} event:/Drilling
+{34b664cf-3366-4399-9e21-0851bdebc0e4} event:/Flying
+{c4924375-0b09-4301-a10a-14e034511855} parameter:/Parameter 1
