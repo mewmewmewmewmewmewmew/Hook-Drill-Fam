@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: PlayerBasicValues
   m_EditorClassIdentifier: 
   speed: 2
-  maxSpeed: 15
+  maxSpeed: 5
   minSpeed: 2
   rotationSpeed: 0.5
   acceleration: 1.0005
   AirDecelleration: 1.0005
-  airTimeLimit: 1
   changeTimeLimit: 0.5
   gravity: 2

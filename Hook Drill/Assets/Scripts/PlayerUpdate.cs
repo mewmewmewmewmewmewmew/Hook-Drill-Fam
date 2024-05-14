@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class PlayerUpdate : MonoBehaviour
 {
     public PlayerScriptableObject _playerValues;
     public BoxCollider2D _playerCollider;
     public GameObject anchor;
+    public GameObject Objdirection;
 
     private bool isGrounded;
     private bool DrillMode;
@@ -17,8 +14,12 @@ public class PlayerUpdate : MonoBehaviour
     private float changeTime;
     private float playerDeceleration;
     private float currentSpeed;
+    private float prevAngle;
 
     private Vector3 _playerVelocity;
+    private Vector2 joyPos;
+   
+
 
     private void UpdateNoDrill()
     {
@@ -50,7 +51,25 @@ public class PlayerUpdate : MonoBehaviour
         if (this.isInGround) { this.UpdateInGroundDrill(); }
         else { this.UpdateOutofGroundDrill(); }
 
-        this.transform.rotation *= Quaternion.Euler(0, 0, Input.GetAxis("Horizontal") * this._playerValues.rotationSpeed);
+        float XaxisJoy = Input.GetAxis("Vertical");
+        float YAxisJoy = Input.GetAxis("Horizontal");
+
+        this.joyPos = new Vector2(XaxisJoy, YAxisJoy);
+
+        Vector3 direction = new Vector3(this.transform.position.x + joyPos.y, this.transform.position.y + joyPos.x, -1);
+
+        this.Objdirection.transform.position = direction;
+
+        float angle = Mathf.Atan2(direction.y - transform.position.y, direction.x - transform.position.x) * Mathf.Rad2Deg;
+
+        if(angle == 0) { angle = this.prevAngle; }
+        
+        Debug.Log("JOY POSITION : " + this.joyPos + "ANGLE : " + angle);
+
+        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle + 90));
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, this._playerValues.rotationSpeed);
+
+        this.prevAngle = angle;
 
         if (this.isInGround) 
         { 
@@ -100,7 +119,7 @@ public class PlayerUpdate : MonoBehaviour
         this.currentSpeed = this._playerValues.speed;
         this.isGrounded = false;
         this.playerDeceleration = 1;
-        
+        this.prevAngle = -90;
     }
     void Update()
     {
@@ -111,6 +130,8 @@ public class PlayerUpdate : MonoBehaviour
         if (!this.DrillMode) { this.UpdateNoDrill(); } 
 
         if (this.DrillMode) { this.UpdateWithDrill(); }
+
+        //Debug.Log(joyPos);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
