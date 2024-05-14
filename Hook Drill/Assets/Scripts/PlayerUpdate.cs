@@ -8,6 +8,7 @@ public class PlayerUpdate : MonoBehaviour
 {
     public PlayerScriptableObject _playerValues;
     public BoxCollider2D _playerCollider;
+    public GameObject anchor;
 
     private bool isGrounded;
     private bool DrillMode;
@@ -15,35 +16,46 @@ public class PlayerUpdate : MonoBehaviour
 
     private float changeTime;
     private float playerDeceleration;
-    private float airTime;
+    private float currentSpeed;
 
     private Vector3 _playerVelocity;
 
     private void UpdateNoDrill()
     {
-        this._playerVelocity.x = 0;
+        if (this.isGrounded) 
+        {
+            this._playerVelocity.x = 0;
+            this._playerVelocity.x += Input.GetAxis("Horizontal") * this._playerValues.speed;
+        }
+
         this._playerVelocity.y += -this._playerValues.gravity * Time.deltaTime;
-
-        this._playerVelocity.x += Input.GetAxis("Horizontal") * this._playerValues.speed;
-
+      
         if (isGrounded && this._playerVelocity.y < 0) { this._playerVelocity.y = 0; }
         this.transform.position += this._playerVelocity * Time.deltaTime;
     }
+    private void UpdateInGroundDrill()
+    {
+        if (this._playerValues.acceleration != 0 && this._playerValues.speed > 0 && this._playerValues.speed <= this._playerValues.maxSpeed)
+            this.currentSpeed *= this._playerValues.acceleration;
+    }
+    private void UpdateOutofGroundDrill()
+    {
+        this._playerVelocity.y += (-this._playerValues.gravity * this._playerValues.AirDecelleration) * Time.deltaTime;
+    }
     private void UpdateWithDrill()
     {
-        if (this._playerValues.speed > this._playerValues.maxSpeed)
-            this._playerValues.speed = this._playerValues.maxSpeed;
+        if (this.currentSpeed > this._playerValues.maxSpeed)
+            this.currentSpeed = this._playerValues.maxSpeed;
 
-        if (this.playerDeceleration != 0 && this._playerValues.speed > 0 && this._playerValues.speed <= this._playerValues.maxSpeed)
-            this._playerValues.speed *= this.playerDeceleration;
-
-        if (!this.isInGround) { this._playerVelocity.y += -this._playerValues.gravity * Time.deltaTime; }
-
-        if (this.airTime >= this._playerValues.airTimeLimit) { this.switchToBaseMode(); return; }
-
-        this._playerVelocity = transform.TransformDirection(Vector2.down) * this._playerValues.speed;
+        if (this.isInGround) { this.UpdateInGroundDrill(); }
+        else { this.UpdateOutofGroundDrill(); }
 
         this.transform.rotation *= Quaternion.Euler(0, 0, Input.GetAxis("Horizontal") * this._playerValues.rotationSpeed);
+
+        if (this.isInGround) 
+        { 
+            this._playerVelocity = transform.TransformDirection(Vector2.down) * this.currentSpeed;
+        }
 
         this.transform.position += this._playerVelocity * Time.deltaTime;
     }
@@ -55,7 +67,7 @@ public class PlayerUpdate : MonoBehaviour
         this._playerCollider.isTrigger = false;
         transform.rotation = Quaternion.Euler(0, 0, 0);
         this.changeTime = 0;
-        this.airTime = 0;
+        this.currentSpeed = this._playerValues.minSpeed;
     }   
     private void inputHandler()
     {
@@ -80,20 +92,19 @@ public class PlayerUpdate : MonoBehaviour
     }
     private void CoolDownUpdate()
     {
-        if (!this.isInGround && this.DrillMode)
-            this.airTime += Time.deltaTime;
-
         if (this.changeTime <= this._playerValues.changeTimeLimit + 0.5f)
             this.changeTime += Time.deltaTime;
-
     }
     void Start()    
     {
+        this.currentSpeed = this._playerValues.speed;
         this.isGrounded = false;
         this.playerDeceleration = 1;
+        
     }
     void Update()
     {
+        this.anchor.transform.position = this.transform.position;
         this.CoolDownUpdate();
         this.inputHandler();
 
@@ -126,7 +137,10 @@ public class PlayerUpdate : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("COLLIDER");
-        if (this.DrillMode) { Debug.Log("DRILL"); }
+        if (this.DrillMode) 
+        { 
+            Debug.Log("DRILL"); 
+        }
         else if (!this.DrillMode) 
         {
             this.isGrounded = true;
