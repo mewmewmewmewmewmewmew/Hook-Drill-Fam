@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3ba4da08500a1f4999ead1669785e2e, type: 3}
+  m_Name: PlayerBasicValues
+  m_EditorClassIdentifier: 
+  speed: 2
+  maxSpeed: 15
+  minSpeed: 2
+  rotationSpeed: 0.5
+  acceleration: 1.0005
+  AirDecelleration: 1.0005
+  airTimeLimit: 1
+  changeTimeLimit: 0.5
+  gravity: 2
