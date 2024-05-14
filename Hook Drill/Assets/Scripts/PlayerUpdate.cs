@@ -8,7 +8,7 @@ public class PlayerUpdate : MonoBehaviour
 {
     public PlayerScriptableObject _playerValues;
     public BoxCollider2D _playerCollider;
-    public GameObject anchor;
+    //public GameObject anchor;
 
     private bool isGrounded;
     private bool DrillMode;
@@ -104,7 +104,7 @@ public class PlayerUpdate : MonoBehaviour
     }
     void Update()
     {
-        this.anchor.transform.position = this.transform.position;
+        //this.anchor.transform.position = this.transform.position;
         this.CoolDownUpdate();
         this.inputHandler();
 
