@@ -38,6 +38,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 4225197261
+    locked: 0
+  - name: BG2
+    uniqueID: 2950139725
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Gameplay
+    uniqueID: 65397137
+    locked: 0
+  - name: Player
+    uniqueID: 1958728459
     locked: 0
