@@ -350,8 +350,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: 
-  sourceBankPath: 
+  sourceProjectPath: ../Fmod/DrillHookFmod/DrillHookFmod/DrillHookFmod.fspro
+  sourceBankPath: ../Fmod/DrillHookFmod/DrillHookFmod/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
@@ -361,7 +361,7 @@ MonoBehaviour:
   EncryptionKey: 
   ImportType: 0
   TargetAssetPath: FMODBanks
-  TargetBankFolder: 
+  TargetBankFolder: C:\Users\mrpon\OneDrive\Documents\Jame-Gam\Hook-Drill-Fam\Hook-Drill-Fam\Fmod\DrillHookFmod\DrillHookFmod\Build\Desktop
   EventLinkage: 0
   LoggingLevel: 2
   SpeakerModeSettings: []
