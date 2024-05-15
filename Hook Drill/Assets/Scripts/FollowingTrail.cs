@@ -24,7 +24,7 @@ public class FollowingTrail : MonoBehaviour
         segmentV = new Vector3[length];
     }
 
-    void Update()
+    void LateUpdate()
     {
         wiggleDir.localRotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * wiggleSpeed) * wiggleMagnitude);
 

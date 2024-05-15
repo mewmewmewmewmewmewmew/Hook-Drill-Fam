@@ -6,18 +6,27 @@ public class PlayerUpdate : MonoBehaviour
     public PlayerScriptableObject _playerValues;
     public BoxCollider2D _playerCollider;
     public GameObject Objdirection;
+    public GameObject Hook;
+
     public Text SpeedText;
+    public Text TurningLeftTimeText;
+    public Text TurningRightTimeText;
 
     private bool isGrounded;
     private bool DrillMode;
     private bool isInGround;
+    private bool turningLeft;
+    private bool turningRight;
 
     private float changeTime;
     private float currentSpeed;
     private float prevAngle;
+    private float turningRightTime;
+    private float turningLeftTime;
 
     private Vector3 _playerVelocity;
     private Vector2 joyPos;
+    private Vector2 PrevJoyPos;
     private void UpdateNoDrill()
     {
         if (this.isGrounded) 
@@ -61,12 +70,34 @@ public class PlayerUpdate : MonoBehaviour
 
         if (angle == 0) { angle = this.prevAngle; }
 
-        //Debug.Log("JOY POSITION : " + this.joyPos + "ANGLE : " + angle);
-
         Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle + 90));
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, this._playerValues.rotationSpeed);
 
         this.prevAngle = angle;
+    }
+    private void CheckTheTurn()
+    {
+        float angle = Vector2.SignedAngle(this.joyPos, this.PrevJoyPos);
+
+        if(angle < 0)
+        {
+            this.turningLeft = true;
+            this.turningRight = false;
+            this.turningRightTime = 0;
+        }
+        else if(angle > 0)
+        {
+            this.turningRight= true;
+            this.turningLeft = false;
+            this.turningLeftTime = 0;
+        }
+        else if (angle == 0)
+        {
+            this.turningLeft= false;
+            this.turningRight= false;
+        }
+
+        this.PrevJoyPos = this.joyPos;
     }
     private void UpdateWithDrill()
     {
@@ -77,6 +108,8 @@ public class PlayerUpdate : MonoBehaviour
         else { this.UpdateOutofGroundDrill(); }
 
         this.JoystickHandler();
+
+        this.CheckTheTurn();
 
         if (this.isInGround) 
         { 
@@ -92,6 +125,7 @@ public class PlayerUpdate : MonoBehaviour
         this.isGrounded = false;
         this._playerCollider.isTrigger = false;
         transform.rotation = Quaternion.Euler(0, 0, 0);
+        this.Hook.SetActive(false);
         this.changeTime = 0;
         this.currentSpeed = this._playerValues.minSpeedInGround;
     }   
@@ -101,7 +135,7 @@ public class PlayerUpdate : MonoBehaviour
         {
             if (this.DrillMode && !this.isInGround)
             {
-                Debug.Log("SWITCH WITH INPUT");
+                Debug.Log("SWITCH WITH INPUT TO BASE");
                 this.switchToBaseMode();
                 return;
             }
@@ -111,6 +145,7 @@ public class PlayerUpdate : MonoBehaviour
                 this.isInGround = true;
                 this.DrillMode = true;
                 this._playerCollider.isTrigger = true;
+                this.Hook.SetActive(true);
                 Debug.Log("SWITCH TO DRILL");
                 this.changeTime = 0;
             }
@@ -120,6 +155,12 @@ public class PlayerUpdate : MonoBehaviour
     {
         if (this.changeTime <= this._playerValues.changeTimeLimit + 0.5f)
             this.changeTime += Time.deltaTime;
+
+        if (turningLeft)
+            this.turningLeftTime += Time.deltaTime;
+
+        if(turningRight)
+            this.turningRightTime += Time.deltaTime;
     }
     void Start()    
     {
@@ -129,13 +170,17 @@ public class PlayerUpdate : MonoBehaviour
         this.currentSpeed = this._playerValues.speed;
         this.isGrounded = false;
         this.prevAngle = -90;
+        this.Hook.SetActive(false);
     }
     void Update()
     {
         this.CoolDownUpdate();
         this.inputHandler();
 
-        this.SpeedText.text = string.Format("{0:0.00}", this.currentSpeed);
+        this.SpeedText.text = "Speed : " + string.Format("{0:0.00}", this.currentSpeed);
+        this.TurningLeftTimeText.text = "LeftTime : " + string.Format("{0:0.00}", this.turningLeftTime);
+        this.TurningRightTimeText.text = "RightTime : " + string.Format("{0:0.00}", this.turningRightTime);
+
         if (!this.DrillMode) { this.UpdateNoDrill(); } 
 
         if (this.DrillMode) { this.UpdateWithDrill(); }

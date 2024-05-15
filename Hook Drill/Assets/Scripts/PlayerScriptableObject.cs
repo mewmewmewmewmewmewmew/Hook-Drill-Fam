@@ -15,11 +15,13 @@ public class PlayerScriptableObject : ScriptableObject
     [Header("Update Speed")]
     [Tooltip("This is how much the player accelerate while he's in ground")][Range(1f, 1.1f)] public float acceleration;
     [Tooltip("This is how much player speed player loose every frame while he's in the air")][Range(0.9f, 1f)] public float AirDecelleration;
-    [Tooltip("This is how much player speed player loose every frame while he's in the air")][Range(1f, 1.1f)] public float AirAcceleration;
-
+    [Tooltip("This is how much player speed player gain while he's falling")][Range(1f, 1.1f)] public float AirAcceleration;
+    [Tooltip("This is how much the player accelerate while he's in ground")][Range(1f, 1.1f)] public float boostAcceleration;
 
     [Header("CoolDown")]
     [Tooltip("This is the minimum time between switching the two modes")][Range(0f, 3f)] public float changeTimeLimit;
+    [Tooltip("This is the duration of the player boost when he'll make the biggest circle")][Range(0f, 3f)] public float boostTime;
+    [Tooltip("This is the maximum duration of a player turn to create a loop")][Range(0f, 3f)] public float MaxLoopTime;
 
     [Header("Else")]
     [Tooltip("gravity")][Range(0f, 10f)] public float gravity;
