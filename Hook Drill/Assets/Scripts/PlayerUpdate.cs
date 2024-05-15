@@ -1,26 +1,32 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerUpdate : MonoBehaviour
 {
     public PlayerScriptableObject _playerValues;
     public BoxCollider2D _playerCollider;
-    public GameObject anchor;
     public GameObject Objdirection;
+    public GameObject Hook;
+
+    public Text SpeedText;
+    public Text TurningLeftTimeText;
+    public Text TurningRightTimeText;
 
     private bool isGrounded;
     private bool DrillMode;
     private bool isInGround;
+    private bool turningLeft;
+    private bool turningRight;
 
     private float changeTime;
-    private float playerDeceleration;
     private float currentSpeed;
     private float prevAngle;
+    private float turningRightTime;
+    private float turningLeftTime;
 
     private Vector3 _playerVelocity;
     private Vector2 joyPos;
-   
-
-
+    private Vector2 PrevJoyPos;
     private void UpdateNoDrill()
     {
         if (this.isGrounded) 
@@ -30,27 +36,27 @@ public class PlayerUpdate : MonoBehaviour
         }
 
         this._playerVelocity.y += -this._playerValues.gravity * Time.deltaTime;
-      
+
         if (isGrounded && this._playerVelocity.y < 0) { this._playerVelocity.y = 0; }
         this.transform.position += this._playerVelocity * Time.deltaTime;
     }
     private void UpdateInGroundDrill()
     {
-        if (this._playerValues.acceleration != 0 && this._playerValues.speed > 0 && this._playerValues.speed <= this._playerValues.maxSpeed)
+        if (this._playerValues.acceleration != 0 && this._playerValues.speed > 0 && this._playerValues.speed <= this._playerValues.maxSpeedInGround)
             this.currentSpeed *= this._playerValues.acceleration;
     }
     private void UpdateOutofGroundDrill()
     {
-        this._playerVelocity.y += (-this._playerValues.gravity * this._playerValues.AirDecelleration) * Time.deltaTime;
+        this._playerVelocity.y += (-this._playerValues.gravity) * Time.deltaTime;
+
+        if(this.currentSpeed > this._playerValues.minSpeedInAir && this._playerVelocity.y > 0)
+            this.currentSpeed *= this._playerValues.AirDecelleration;
+
+        if (this._playerVelocity.y < 0)
+            this.currentSpeed *= this._playerValues.AirAcceleration;
     }
-    private void UpdateWithDrill()
+    private void JoystickHandler()
     {
-        if (this.currentSpeed > this._playerValues.maxSpeed)
-            this.currentSpeed = this._playerValues.maxSpeed;
-
-        if (this.isInGround) { this.UpdateInGroundDrill(); }
-        else { this.UpdateOutofGroundDrill(); }
-
         float XaxisJoy = Input.GetAxis("Vertical");
         float YAxisJoy = Input.GetAxis("Horizontal");
 
@@ -62,14 +68,48 @@ public class PlayerUpdate : MonoBehaviour
 
         float angle = Mathf.Atan2(direction.y - transform.position.y, direction.x - transform.position.x) * Mathf.Rad2Deg;
 
-        if(angle == 0) { angle = this.prevAngle; }
-        
-        Debug.Log("JOY POSITION : " + this.joyPos + "ANGLE : " + angle);
+        if (angle == 0) { angle = this.prevAngle; }
 
         Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle + 90));
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, this._playerValues.rotationSpeed);
 
         this.prevAngle = angle;
+    }
+    private void CheckTheTurn()
+    {
+        float angle = Vector2.SignedAngle(this.joyPos, this.PrevJoyPos);
+
+        if(angle < 0)
+        {
+            this.turningLeft = true;
+            this.turningRight = false;
+            this.turningRightTime = 0;
+        }
+        else if(angle > 0)
+        {
+            this.turningRight= true;
+            this.turningLeft = false;
+            this.turningLeftTime = 0;
+        }
+        else if (angle == 0)
+        {
+            this.turningLeft= false;
+            this.turningRight= false;
+        }
+
+        this.PrevJoyPos = this.joyPos;
+    }
+    private void UpdateWithDrill()
+    {
+        if (this.currentSpeed > this._playerValues.maxSpeedInGround)
+            this.currentSpeed = this._playerValues.maxSpeedInGround;
+
+        if (this.isInGround) { this.UpdateInGroundDrill(); }
+        else { this.UpdateOutofGroundDrill(); }
+
+        this.JoystickHandler();
+
+        this.CheckTheTurn();
 
         if (this.isInGround) 
         { 
@@ -85,8 +125,9 @@ public class PlayerUpdate : MonoBehaviour
         this.isGrounded = false;
         this._playerCollider.isTrigger = false;
         transform.rotation = Quaternion.Euler(0, 0, 0);
+        this.Hook.SetActive(false);
         this.changeTime = 0;
-        this.currentSpeed = this._playerValues.minSpeed;
+        this.currentSpeed = this._playerValues.minSpeedInGround;
     }   
     private void inputHandler()
     {
@@ -94,7 +135,7 @@ public class PlayerUpdate : MonoBehaviour
         {
             if (this.DrillMode && !this.isInGround)
             {
-                Debug.Log("SWITCH WITH INPUT");
+                Debug.Log("SWITCH WITH INPUT TO BASE");
                 this.switchToBaseMode();
                 return;
             }
@@ -104,6 +145,7 @@ public class PlayerUpdate : MonoBehaviour
                 this.isInGround = true;
                 this.DrillMode = true;
                 this._playerCollider.isTrigger = true;
+                this.Hook.SetActive(true);
                 Debug.Log("SWITCH TO DRILL");
                 this.changeTime = 0;
             }
@@ -113,25 +155,35 @@ public class PlayerUpdate : MonoBehaviour
     {
         if (this.changeTime <= this._playerValues.changeTimeLimit + 0.5f)
             this.changeTime += Time.deltaTime;
+
+        if (turningLeft)
+            this.turningLeftTime += Time.deltaTime;
+
+        if(turningRight)
+            this.turningRightTime += Time.deltaTime;
     }
     void Start()    
     {
+        Physics2D.IgnoreLayerCollision(7, 3, true);
+        Physics2D.IgnoreLayerCollision(6, 7, true);
+
         this.currentSpeed = this._playerValues.speed;
         this.isGrounded = false;
-        this.playerDeceleration = 1;
         this.prevAngle = -90;
+        this.Hook.SetActive(false);
     }
     void Update()
     {
-        this.anchor.transform.position = this.transform.position;
         this.CoolDownUpdate();
         this.inputHandler();
+
+        this.SpeedText.text = "Speed : " + string.Format("{0:0.00}", this.currentSpeed);
+        this.TurningLeftTimeText.text = "LeftTime : " + string.Format("{0:0.00}", this.turningLeftTime);
+        this.TurningRightTimeText.text = "RightTime : " + string.Format("{0:0.00}", this.turningRightTime);
 
         if (!this.DrillMode) { this.UpdateNoDrill(); } 
 
         if (this.DrillMode) { this.UpdateWithDrill(); }
-
-        //Debug.Log(joyPos);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

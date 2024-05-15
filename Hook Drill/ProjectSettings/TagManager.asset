@@ -8,11 +8,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - Hook
   - 
   - 
   - 
@@ -38,18 +38,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: BG
-    uniqueID: 4225197261
-    locked: 0
-  - name: BG2
-    uniqueID: 2950139725
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Gameplay
-    uniqueID: 65397137
+  - name: BackGround
+    uniqueID: 967525805
     locked: 0
-  - name: Player
-    uniqueID: 1958728459
+  - name: MainSprites
+    uniqueID: 1888501921
+    locked: 0
+  - name: Front
+    uniqueID: 3892087061
     locked: 0

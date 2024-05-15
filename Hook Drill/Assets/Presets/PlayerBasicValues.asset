@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3ba4da08500a1f4999ead1669785e2e, type: 3}
   m_Name: PlayerBasicValues
   m_EditorClassIdentifier: 
-  speed: 2
-  maxSpeed: 5
-  minSpeed: 2
-  rotationSpeed: 0.5
+  speed: 3
+  maxSpeedInGround: 6
+  minSpeedInGround: 2
+  minSpeedInAir: 1
+  rotationSpeed: 1
   acceleration: 1.0005
-  AirDecelleration: 1.0005
+  AirDecelleration: 0.997
+  AirAcceleration: 1.003
   changeTimeLimit: 0.5
   gravity: 2
