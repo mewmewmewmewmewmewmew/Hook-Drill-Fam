@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerBasicValues
   m_EditorClassIdentifier: 
   speed: 2
-  maxSpeed: 5
+  maxSpeed: 10
   minSpeed: 2
   rotationSpeed: 0.5
   acceleration: 1.0005
