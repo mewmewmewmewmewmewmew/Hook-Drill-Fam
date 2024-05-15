@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerUpdate : MonoBehaviour
 {
     public PlayerScriptableObject _playerValues;
     public BoxCollider2D _playerCollider;
     public GameObject Objdirection;
+    public Text SpeedText;
 
     private bool isGrounded;
     private bool DrillMode;
@@ -31,12 +33,18 @@ public class PlayerUpdate : MonoBehaviour
     }
     private void UpdateInGroundDrill()
     {
-        if (this._playerValues.acceleration != 0 && this._playerValues.speed > 0 && this._playerValues.speed <= this._playerValues.maxSpeed)
+        if (this._playerValues.acceleration != 0 && this._playerValues.speed > 0 && this._playerValues.speed <= this._playerValues.maxSpeedInGround)
             this.currentSpeed *= this._playerValues.acceleration;
     }
     private void UpdateOutofGroundDrill()
     {
-        this._playerVelocity.y += (-this._playerValues.gravity * this._playerValues.AirDecelleration) * Time.deltaTime;
+        this._playerVelocity.y += (-this._playerValues.gravity) * Time.deltaTime;
+
+        if(this.currentSpeed > this._playerValues.minSpeedInAir && this._playerVelocity.y > 0)
+            this.currentSpeed *= this._playerValues.AirDecelleration;
+
+        if (this._playerVelocity.y < 0)
+            this.currentSpeed *= this._playerValues.AirAcceleration;
     }
     private void JoystickHandler()
     {
@@ -53,7 +61,7 @@ public class PlayerUpdate : MonoBehaviour
 
         if (angle == 0) { angle = this.prevAngle; }
 
-        Debug.Log("JOY POSITION : " + this.joyPos + "ANGLE : " + angle);
+        //Debug.Log("JOY POSITION : " + this.joyPos + "ANGLE : " + angle);
 
         Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle + 90));
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, this._playerValues.rotationSpeed);
@@ -62,8 +70,8 @@ public class PlayerUpdate : MonoBehaviour
     }
     private void UpdateWithDrill()
     {
-        if (this.currentSpeed > this._playerValues.maxSpeed)
-            this.currentSpeed = this._playerValues.maxSpeed;
+        if (this.currentSpeed > this._playerValues.maxSpeedInGround)
+            this.currentSpeed = this._playerValues.maxSpeedInGround;
 
         if (this.isInGround) { this.UpdateInGroundDrill(); }
         else { this.UpdateOutofGroundDrill(); }
@@ -85,7 +93,7 @@ public class PlayerUpdate : MonoBehaviour
         this._playerCollider.isTrigger = false;
         transform.rotation = Quaternion.Euler(0, 0, 0);
         this.changeTime = 0;
-        this.currentSpeed = this._playerValues.minSpeed;
+        this.currentSpeed = this._playerValues.minSpeedInGround;
     }   
     private void inputHandler()
     {
@@ -115,6 +123,9 @@ public class PlayerUpdate : MonoBehaviour
     }
     void Start()    
     {
+        Physics2D.IgnoreLayerCollision(7, 3, true);
+        Physics2D.IgnoreLayerCollision(6, 7, true);
+
         this.currentSpeed = this._playerValues.speed;
         this.isGrounded = false;
         this.prevAngle = -90;
@@ -124,6 +135,7 @@ public class PlayerUpdate : MonoBehaviour
         this.CoolDownUpdate();
         this.inputHandler();
 
+        this.SpeedText.text = string.Format("{0:0.00}", this.currentSpeed);
         if (!this.DrillMode) { this.UpdateNoDrill(); } 
 
         if (this.DrillMode) { this.UpdateWithDrill(); }
