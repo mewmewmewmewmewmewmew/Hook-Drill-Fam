@@ -46,7 +46,6 @@ public class PlayerUpdate : MonoBehaviour
         this.cam.orthographicSize = Mathf.SmoothDamp(this.cam.orthographicSize, this.currentZoom, ref this.velocity, this._cameraValues.smoothTime);
         this.cam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10);
     }
-
     private void UpdateNoDrill()
     {
         if (this.isGrounded) 
@@ -121,7 +120,7 @@ public class PlayerUpdate : MonoBehaviour
     }
     private void UpdateWithDrill()
     {
-        if (!this.isBoosting && this.currentSpeed > this._playerValues.maxSpeedInGround)
+        if (!this.isBoosting && this.currentSpeed > this._playerValues.maxSpeedInGround && this.isInGround)
             this.currentSpeed = this._playerValues.maxSpeedInGround;
 
         if (this.isBoosting && this.BoostTime < this._playerValues.boostTimeLimit)
