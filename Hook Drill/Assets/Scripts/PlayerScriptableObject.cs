@@ -22,7 +22,10 @@ public class PlayerScriptableObject : ScriptableObject
     [Tooltip("This is the minimum time between switching the two modes")][Range(0f, 3f)] public float changeTimeLimit;
     [Tooltip("This is the duration of the player boost when he'll make the biggest circle")][Range(0f, 3f)] public float boostTimeLimit;
     [Tooltip("This is the maximum duration of a player turn to create a loop")][Range(0f, 3f)] public float MaxLoopTime;
+    [Tooltip("This is the duration of the controller vibration")][Range(0f, 3f)] public float VibrationTimeLinit;
 
     [Header("Else")]
     [Tooltip("gravity")][Range(0f, 10f)] public float gravity;
+    [Tooltip("This is how strong the controller will vibrate")][Range(0f, 1f)] public float HighVibration;
+    [Tooltip("This is how fast the controller will vibrate")][Range(0f, 1f)] public float LowVibration;
 }

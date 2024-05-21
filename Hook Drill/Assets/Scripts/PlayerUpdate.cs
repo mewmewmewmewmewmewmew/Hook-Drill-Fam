@@ -1,4 +1,4 @@
-using System.Runtime.CompilerServices;
+using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +22,7 @@ public class PlayerUpdate : MonoBehaviour
     private bool isInGround;
     private bool DirectionTurn;
     private bool isBoosting;
+    private bool vibrating;
 
     private float changeTime;
     private float currentSpeed;
@@ -31,6 +32,7 @@ public class PlayerUpdate : MonoBehaviour
     private float BoostTime;
     private float currentZoom;
     private float velocity;
+    private float vibratingTime;
 
     private Vector3 _playerVelocity;
     private Vector2 joyPos;
@@ -162,6 +164,7 @@ public class PlayerUpdate : MonoBehaviour
 
             if (!this.DrillMode && this.isGrounded)
             {
+                this.vibrating = true;
                 this.isInGround = true;
                 this.DrillMode = true;
                 this._playerCollider.isTrigger = true;
@@ -179,13 +182,25 @@ public class PlayerUpdate : MonoBehaviour
         if (this.isBoosting && this.BoostTime < this._playerValues.boostTimeLimit + 0.5f)
             this.BoostTime += Time.deltaTime;
 
-        if (!this.isBoosting)
-            this.BoostTime = 0;
-
         if(this.BoostTime > this._playerValues.boostTimeLimit)
+        {
             this.isBoosting = false;
+            this.BoostTime = 0;
+        }
+            
+        if (this.vibrating)
+            this.vibratingTime += Time.deltaTime;
+
+        if (this.vibratingTime > this._playerValues.VibrationTimeLinit)
+        {
+            this.vibrating = false;
+            this.vibratingTime = 0;
+            Gamepad.current.SetMotorSpeeds(0, 0);
+        }
+            
+
     }
-    void Start()    
+    void Start()
     {
         Physics2D.IgnoreLayerCollision(7, 3, true);
 
@@ -194,6 +209,7 @@ public class PlayerUpdate : MonoBehaviour
         this.prevAngle = -90;
         this.Hook.SetActive(false);
         this.currentZoom = this._cameraValues.maximumZoom;
+        this.vibrating = false;
     }
     void Update()
     {
@@ -207,6 +223,9 @@ public class PlayerUpdate : MonoBehaviour
 
         if (this.DrillMode) { this.UpdateWithDrill(); }
 
+        if (this.vibrating)
+            Gamepad.current.SetMotorSpeeds(this._playerValues.LowVibration, this._playerValues.HighVibration);
+
         this.UpdateCamera();
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -214,12 +233,13 @@ public class PlayerUpdate : MonoBehaviour
         Debug.Log("ENTER " + collision.tag);
         
         if (this.DrillMode && collision.CompareTag("Ground")) 
-        { 
+        {
             this.isInGround = true;
             collision.isTrigger = true;
         }
         else if (this.DrillMode && collision.CompareTag("Rope") && !isBoosting)
         {
+            this.vibrating = true;
             this.turningTime = 0;
             this.isBoosting = true;
             float ratio =  this.turningTime / this._playerValues.MaxLoopTime;

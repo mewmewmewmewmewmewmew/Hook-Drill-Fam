@@ -24,4 +24,7 @@ MonoBehaviour:
   changeTimeLimit: 0.5
   boostTimeLimit: 2
   MaxLoopTime: 1.5
+  VibrationTimeLinit: 1
   gravity: 2
+  HighVibration: 0.5
+  LowVibration: 0.5
