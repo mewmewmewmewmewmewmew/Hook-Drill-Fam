@@ -31,7 +31,6 @@ public class PlayerUpdate : MonoBehaviour
     private float BoostTime;
     private float currentZoom;
     private float velocity;
-    private float zoomMultiplier;
 
     private Vector3 _playerVelocity;
     private Vector2 joyPos;
@@ -39,8 +38,9 @@ public class PlayerUpdate : MonoBehaviour
 
     private void UpdateCamera()
     {
-        this.currentZoom = this.currentSpeed * this.zoomMultiplier;
-        if(!this.isBoosting ) 
+        this.currentZoom = this.currentSpeed * this._cameraValues.zoomMultiplier;
+
+        if (!this.isBoosting)
             this.currentZoom = Mathf.Clamp(this.currentZoom, this._cameraValues.minimumZoom, this._cameraValues.maximumZoom);
 
         this.cam.orthographicSize = Mathf.SmoothDamp(this.cam.orthographicSize, this.currentZoom, ref this.velocity, this._cameraValues.smoothTime);
@@ -194,7 +194,6 @@ public class PlayerUpdate : MonoBehaviour
         this.prevAngle = -90;
         this.Hook.SetActive(false);
         this.currentZoom = this._cameraValues.maximumZoom;
-        this.zoomMultiplier = this._playerValues.minSpeedInGround / this._cameraValues.minimumZoom;
     }
     void Update()
     {
@@ -221,6 +220,7 @@ public class PlayerUpdate : MonoBehaviour
         }
         else if (this.DrillMode && collision.CompareTag("Rope") && !isBoosting)
         {
+            this.turningTime = 0;
             this.isBoosting = true;
             float ratio =  this.turningTime / this._playerValues.MaxLoopTime;
 
