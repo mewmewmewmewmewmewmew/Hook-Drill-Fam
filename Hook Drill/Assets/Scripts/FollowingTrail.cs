@@ -11,6 +11,7 @@ public class FollowingTrail : MonoBehaviour
 
     public Transform targetDir;
     public float targetDist;
+    private float tempDist;
     public float smoothSpeed;
 
     public float wiggleSpeed;
@@ -55,7 +56,12 @@ public class FollowingTrail : MonoBehaviour
             if (i == segmentPoses.Length - 1 && isHooked)
                 continue;
 
-            Vector3 targetPos = segmentPoses[i - 1] + (segmentPoses[i] - segmentPoses[i - 1]).normalized * targetDist;
+            if (i == 1)
+                this.tempDist += 0.5f;
+            else
+                this.tempDist = targetDist;
+
+            Vector3 targetPos = segmentPoses[i - 1] + (segmentPoses[i] - segmentPoses[i - 1]).normalized * tempDist;
             segmentPoses[i] = Vector3.SmoothDamp(segmentPoses[i], targetPos, ref segmentV[i], smoothSpeed);
             bodyParts[i - 1].position = segmentPoses[i];
         }
@@ -70,13 +76,5 @@ public class FollowingTrail : MonoBehaviour
         }
 
         myCollider.SetPoints(points);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            Debug.Log("TOUCHE");
-        }
     }
 }
