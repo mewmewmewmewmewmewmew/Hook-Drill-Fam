@@ -20,12 +20,15 @@ public class FollowingTrail : MonoBehaviour
 
     public EdgeCollider2D myCollider;
 
+    bool isHooked;
+
     [SerializeField] private float ExtendingDistance;
     void Start()
     {
         lineRend.positionCount = length;
         segmentPoses = new Vector3[length];
         segmentV = new Vector3[length];
+        this.isHooked = false;
     }
 
     private void InputHandler()
@@ -35,6 +38,9 @@ public class FollowingTrail : MonoBehaviour
        
         if (LeftInput != 0){ this.targetDist += ExtendingDistance * LeftInput; Debug.Log("Extend"); }
         if (RightInput != 0) { this.targetDist -= ExtendingDistance * RightInput; Debug.Log("No extend"); }
+
+        if(Input.GetButton("Fire1"))
+            this.isHooked = !this.isHooked;
     }
     void LateUpdate()
     {
@@ -46,6 +52,9 @@ public class FollowingTrail : MonoBehaviour
 
         for (int i = 1; i < segmentPoses.Length; i++)
         {
+            if (i == segmentPoses.Length - 1 && isHooked)
+                continue;
+
             Vector3 targetPos = segmentPoses[i - 1] + (segmentPoses[i] - segmentPoses[i - 1]).normalized * targetDist;
             segmentPoses[i] = Vector3.SmoothDamp(segmentPoses[i], targetPos, ref segmentV[i], smoothSpeed);
             bodyParts[i - 1].position = segmentPoses[i];

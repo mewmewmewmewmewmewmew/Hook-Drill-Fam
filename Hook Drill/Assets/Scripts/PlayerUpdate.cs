@@ -153,7 +153,7 @@ public class PlayerUpdate : MonoBehaviour
     }   
     private void inputHandler()
     {
-        if (Input.GetButton("Fire1") && this.changeTime >= this._playerValues.changeTimeLimit)
+        if (Input.GetButton("Fire2") && this.changeTime >= this._playerValues.changeTimeLimit)
         {
             if (this.DrillMode && !this.isInGround)
             {
