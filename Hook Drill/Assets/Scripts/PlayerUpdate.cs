@@ -1,9 +1,12 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class PlayerUpdate : MonoBehaviour
 {
+
+    public UnityEvent onBoost;
     public PlayerScriptableObject _playerValues;
     public CameraObject _cameraValues;
 
@@ -249,6 +252,9 @@ public class PlayerUpdate : MonoBehaviour
             this.boostAccelerationUpdtated = (this._playerValues.MaxboostAcceleration - 1) * ratio;
 
             this.boostAccelerationUpdtated += 1;
+
+            onBoost.Invoke();
+
         }
         else if (!this.DrillMode) { Debug.Log(" NO DRILL"); }
     }
