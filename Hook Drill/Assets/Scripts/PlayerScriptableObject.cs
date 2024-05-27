@@ -11,13 +11,15 @@ public class PlayerScriptableObject : ScriptableObject
     [Tooltip("This is minimal speed the player can have")][Range(1f, 10f)] public float minSpeedInGround;
     [Tooltip("This is minimal speed the player can have")][Range(1f, 10f)] public float minSpeedInAir;
     [Tooltip("This is the rotation speed of the player when he's in drill mode")][Range(0.5f, 1.5f)] public float rotationSpeed;
+    [Tooltip("This is the speed of the player while he moves in the air")][Range(0.5f, 1.5f)] public float MovementSpeedInAir;
     [Tooltip("This is the speed curve during the boosTime")] public AnimationCurve boostCurve;
 
     [Header("Update Speed")]
-    [Tooltip("This is how much the player accelerate while he's in ground")][Range(1f, 1.1f)] public float acceleration;
+    [Tooltip("This is how much the player accelerate while he's in ground")][Range(1f, 1.05f)] public float acceleration;
     [Tooltip("This is how much player speed player loose every frame while he's in the air")][Range(0.9f, 1f)] public float AirDecelleration;
     [Tooltip("This is how much player speed player gain while he's falling")][Range(1f, 1.1f)] public float AirAcceleration;
-    [Tooltip("This is the maximum amount of acceleration the player can get while boosting")][Range(1f, 5f)] public float MaxboostAcceleration;
+    [Tooltip("This is the maximum amount of acceleration the player can get while boosting")][Range(1f, 5f)] public float MinBoostAcceleration;
+    [Tooltip("This is the maximum amount of acceleration the player can get while boosting")][Range(3f, 10f)] public float MaxboostAcceleration;
 
     [Header("CoolDown")]
     [Tooltip("This is the minimum time between switching the two modes")][Range(0f, 3f)] public float changeTimeLimit;

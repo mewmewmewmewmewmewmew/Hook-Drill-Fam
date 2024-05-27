@@ -13,25 +13,26 @@ MonoBehaviour:
   m_Name: PlayerBasicValues
   m_EditorClassIdentifier: 
   speed: 3
-  maxSpeedInGround: 6
+  maxSpeedInGround: 15
   minSpeedInGround: 2
   minSpeedInAir: 1
-  rotationSpeed: 1
+  rotationSpeed: 1.5
+  MovementSpeedInAir: 0
   boostCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 6.890688
-      outSlope: 6.890688
+      inSlope: 5.6944485
+      outSlope: 5.6944485
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.14440316
-      value: 0.99503714
+      time: 0.17572904
+      value: 1.00068
       inSlope: 0.010008428
       outSlope: 0.010008428
       tangentMode: 0
@@ -50,14 +51,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  acceleration: 1.0005
+  acceleration: 1.00005
   AirDecelleration: 0.997
   AirAcceleration: 1.003
-  MaxboostAcceleration: 1.001
+  MinBoostAcceleration: 3
+  MaxboostAcceleration: 10
   changeTimeLimit: 0.5
   boostTimeLimit: 2
-  MaxLoopTime: 1.5
-  VibrationTimeLinit: 3
+  MaxLoopTime: 3
+  VibrationTimeLinit: 1
   gravity: 2
-  HighVibration: 1
-  LowVibration: 1
+  HighVibration: 0.374
+  LowVibration: 0.383

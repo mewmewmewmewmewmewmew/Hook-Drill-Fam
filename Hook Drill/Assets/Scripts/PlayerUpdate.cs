@@ -14,8 +14,8 @@ public class PlayerUpdate : MonoBehaviour
     public GameObject Objdirection;
     public GameObject Hook;
 
-    public Text SpeedText;
-    public Text TurningTimeText;
+    //public Text SpeedText;
+    //public Text TurningTimeText;
 
     private bool isGrounded;
     private bool DrillMode;
@@ -217,8 +217,8 @@ public class PlayerUpdate : MonoBehaviour
         this.CoolDownUpdate();
         this.inputHandler();
 
-        this.SpeedText.text = "Speed : " + string.Format("{0:0.00}", this.currentSpeed);
-        this.TurningTimeText.text = "TurningTime : " + string.Format("{0:0.00}", this.turningTime);
+        //this.SpeedText.text = "Speed : " + string.Format("{0:0.00}", this.currentSpeed);
+        //this.TurningTimeText.text = "TurningTime : " + string.Format("{0:0.00}", this.turningTime);
 
         if (!this.DrillMode) { this.UpdateNoDrill(); } 
 
@@ -231,8 +231,6 @@ public class PlayerUpdate : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("ENTER " + collision.tag);
-        
         if (this.DrillMode && collision.CompareTag("Ground")) 
         {
             this.isInGround = true;
@@ -249,15 +247,15 @@ public class PlayerUpdate : MonoBehaviour
 
             this.boostAccelerationUpdtated = this. _playerValues.MaxboostAcceleration  * ratio;
 
+            if(boostAccelerationUpdtated < this._playerValues.MinBoostAcceleration)
+                this.boostAccelerationUpdtated = this._playerValues.MinBoostAcceleration;
+
             this.turningTime = 0;
         }
         else if (!this.DrillMode) { Debug.Log(" NO DRILL"); }
     }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("EXIT " + collision.tag);
-
         if (this.DrillMode && collision.CompareTag("Ground")) 
         {
             this.isInGround = false;
@@ -275,7 +273,5 @@ public class PlayerUpdate : MonoBehaviour
         {
             this.isGrounded = true;
         }
-
-        
     }
 }
