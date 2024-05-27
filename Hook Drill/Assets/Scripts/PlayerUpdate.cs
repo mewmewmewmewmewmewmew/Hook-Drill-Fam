@@ -26,6 +26,7 @@ public class PlayerUpdate : MonoBehaviour
 
     private float changeTime;
     private float currentSpeed;
+    private float boostBeforeSpeed;
     private float prevAngle;
     private float turningTime;
     private float boostAccelerationUpdtated;
@@ -126,7 +127,7 @@ public class PlayerUpdate : MonoBehaviour
             this.currentSpeed = this._playerValues.maxSpeedInGround;
 
         if (this.isBoosting && this.BoostTime < this._playerValues.boostTimeLimit)
-            this.currentSpeed *= this.boostAccelerationUpdtated;
+            this.currentSpeed = this.boostBeforeSpeed  + (this.boostAccelerationUpdtated * this._playerValues.boostCurve.Evaluate(this.BoostTime));
 
         if (this.isInGround) { this.UpdateInGroundDrill(); }
         else { this.UpdateOutofGroundDrill(); }
@@ -239,19 +240,20 @@ public class PlayerUpdate : MonoBehaviour
         }
         else if (this.DrillMode && collision.CompareTag("Rope") && !isBoosting)
         {
+            this.boostBeforeSpeed = this.currentSpeed;
             this.vibrating = true;
-            this.turningTime = 0;
             this.isBoosting = true;
             float ratio =  this.turningTime / this._playerValues.MaxLoopTime;
 
             if (ratio > 1) { ratio = 1; }
 
-            this.boostAccelerationUpdtated = (this._playerValues.MaxboostAcceleration - 1) * ratio;
+            this.boostAccelerationUpdtated = this. _playerValues.MaxboostAcceleration  * ratio;
 
-            this.boostAccelerationUpdtated += 1;
+            this.turningTime = 0;
         }
         else if (!this.DrillMode) { Debug.Log(" NO DRILL"); }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         Debug.Log("EXIT " + collision.tag);

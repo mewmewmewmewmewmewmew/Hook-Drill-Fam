@@ -17,6 +17,39 @@ MonoBehaviour:
   minSpeedInGround: 2
   minSpeedInAir: 1
   rotationSpeed: 1
+  boostCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 6.890688
+      outSlope: 6.890688
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.14440316
+      value: 0.99503714
+      inSlope: 0.010008428
+      outSlope: 0.010008428
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2641537
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 2.0003767
+      value: 0.114709556
+      inSlope: -0.1738318
+      outSlope: -0.1738318
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13994083
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   acceleration: 1.0005
   AirDecelleration: 0.997
   AirAcceleration: 1.003
