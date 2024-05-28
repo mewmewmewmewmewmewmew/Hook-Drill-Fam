@@ -1,26 +1,31 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FollowingTrail : MonoBehaviour
 {
-    public int length;
+    public Transform wiggleDir;
+    public Transform[] bodyParts;
     public LineRenderer lineRend;
+    public EdgeCollider2D myCollider;
+
+    public UnityEvent ExtendRope;
+    public UnityEvent RetractRope;
+
     public Vector3[] segmentPoses;
     private Vector3[] segmentV;
 
     public Transform targetDir;
+
+    public int length;
+
+    private float tempDist;
     public float targetDist;
     public float smoothSpeed;
-
     public float wiggleSpeed;
     public float wiggleMagnitude;
-    public Transform wiggleDir;
-    public Transform[] bodyParts;
 
-    public EdgeCollider2D myCollider;
-
-    bool isHooked;
+    static public bool isHooked;
 
     [SerializeField] private float ExtendingDistance;
     void Start()
@@ -28,19 +33,25 @@ public class FollowingTrail : MonoBehaviour
         lineRend.positionCount = length;
         segmentPoses = new Vector3[length];
         segmentV = new Vector3[length];
-        this.isHooked = false;
+        PlayerUpdate.maxdistance = this.length * this.targetDist;
     }
-
     private void InputHandler()
     {
         float LeftInput = Input.GetAxis("TriggerLeft");
         float RightInput = Input.GetAxis("TriggerRight");
        
-        if (LeftInput != 0){ this.targetDist += ExtendingDistance * LeftInput; Debug.Log("Extend"); }
-        if (RightInput != 0) { this.targetDist -= ExtendingDistance * RightInput; Debug.Log("No extend"); }
-
-        if(Input.GetButton("Fire1"))
-            this.isHooked = !this.isHooked;
+        if (LeftInput != 0)
+        { 
+            this.targetDist += ExtendingDistance * LeftInput; Debug.Log("Extend");
+            PlayerUpdate.maxdistance = this.length * this.targetDist;
+            this.ExtendRope.Invoke();
+        }
+        if (RightInput != 0) 
+        { 
+            this.targetDist -= ExtendingDistance * RightInput; Debug.Log("No extend");
+            PlayerUpdate.maxdistance = this.length * this.targetDist;
+            this.RetractRope.Invoke();
+        }
     }
     void LateUpdate()
     {
@@ -53,9 +64,18 @@ public class FollowingTrail : MonoBehaviour
         for (int i = 1; i < segmentPoses.Length; i++)
         {
             if (i == segmentPoses.Length - 1 && isHooked)
+            {
+                Debug.Log("skip the last one");
                 continue;
+            }
+                
 
-            Vector3 targetPos = segmentPoses[i - 1] + (segmentPoses[i] - segmentPoses[i - 1]).normalized * targetDist;
+            if (i == 1)
+                this.tempDist += 0.5f;
+            else
+                this.tempDist = targetDist;
+
+            Vector3 targetPos = segmentPoses[i - 1] + (segmentPoses[i] - segmentPoses[i - 1]).normalized * tempDist;
             segmentPoses[i] = Vector3.SmoothDamp(segmentPoses[i], targetPos, ref segmentV[i], smoothSpeed);
             bodyParts[i - 1].position = segmentPoses[i];
         }
@@ -65,18 +85,9 @@ public class FollowingTrail : MonoBehaviour
         List<Vector2> points = new List<Vector2>();
         for (int position = 1; position < lineRend.positionCount; position++)
         {
-            //ignores z axis when translating vector3 to vector2
             points.Add(lineRend.GetPosition(position));
         }
 
         myCollider.SetPoints(points);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            Debug.Log("TOUCHE");
-        }
     }
 }

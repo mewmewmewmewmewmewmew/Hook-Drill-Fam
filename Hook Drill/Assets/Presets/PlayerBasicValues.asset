@@ -13,51 +13,55 @@ MonoBehaviour:
   m_Name: PlayerBasicValues
   m_EditorClassIdentifier: 
   speed: 3
-  maxSpeedInGround: 6
+  maxSpeedInGround: 15
   minSpeedInGround: 2
   minSpeedInAir: 1
-  rotationSpeed: 1
-  acceleration: 1.0005
-  AirDecelleration: 0.997
-  AirAcceleration: 1.003
-  MaxboostAcceleration: 1.001
-  MaxboostCurve:
+  rotationSpeed: 1.5
+  MovementSpeedInAir: 2
+  boostCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
+      inSlope: 5.6944485
+      outSlope: 5.6944485
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.06815869
-      value: 0.9057365
-      inSlope: 2.380412
-      outSlope: 2.380412
+      time: 0.17572904
+      value: 1.00068
+      inSlope: 0.010008428
+      outSlope: 0.010008428
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.8218921
-      outWeight: 0.32419607
+      inWeight: 0.2641537
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 0.19900495
-      inSlope: 0
-      outSlope: 0
+      time: 2.0003767
+      value: 0.114709556
+      inSlope: -0.1738318
+      outSlope: -0.1738318
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.13994083
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  changeTimeLimit: 0.5
+  acceleration: 1.00005
+  AirDecelleration: 0.997
+  BreakDecelleration: 0.997
+  AirAcceleration: 1.0015
+  MinBoostAcceleration: 3
+  MaxboostAcceleration: 10
+  GliderTimeLimit: 5
   boostTimeLimit: 2
-  MaxLoopTime: 1.5
-  VibrationTimeLinit: 0.7
-  gravity: 2
-  HighVibration: 0.45
-  LowVibration: 0.055
+  MaxLoopTime: 3
+  VibrationTimeLinit: 1
+  gravity: 3
+  Glidergravity: 1
+  HighVibration: 0.374
+  LowVibration: 0.383

@@ -1,11 +1,17 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class PlayerUpdate : MonoBehaviour
 {
-    public UnityEvent onBoost;
+    public UnityEvent braking;
+    public UnityEvent enterGround;
+    public UnityEvent exitGround;
+    public UnityEvent RopeCollide;
+    public UnityEvent GliderMode;
+
+
     public PlayerScriptableObject _playerValues;
     public CameraObject _cameraValues;
 
@@ -15,19 +21,19 @@ public class PlayerUpdate : MonoBehaviour
 
     public GameObject Objdirection;
     public GameObject Hook;
+    public GameObject Glider;
 
-    public Text SpeedText;
-    public Text TurningTimeText;
+    //public Text SpeedText;
+    //public Text TurningTimeText;
 
-    private bool isGrounded;
-    private bool DrillMode;
+    private bool isHooked;
     private bool isInGround;
     private bool DirectionTurn;
     private bool isBoosting;
     private bool vibrating;
 
-    private float changeTime;
     private float currentSpeed;
+    private float boostBeforeSpeed;
     private float prevAngle;
     private float turningTime;
     private float boostAccelerationUpdtated;
@@ -35,11 +41,29 @@ public class PlayerUpdate : MonoBehaviour
     private float currentZoom;
     private float velocity;
     private float vibratingTime;
+    private float hookcd;
+    private float hookedMaxcd;
+    private float GliderTime;
+
+    static public float maxdistance;
 
     private Vector3 _playerVelocity;
+    private Vector3 futurPos;
     private Vector2 joyPos;
     private Vector2 PrevJoyPos;
 
+    private void UpdateHooked()
+    {
+        this.UpdateOutofGroundDrill();
+
+        this.futurPos = this.transform.position + this._playerVelocity * Time.deltaTime;
+
+        float distance = Vector3.Distance(futurPos, Hook.transform.position);
+        if ( distance < maxdistance)
+            this.transform.position = futurPos;
+
+        Debug.Log(distance);
+    }
     private void UpdateCamera()
     {
         this.currentZoom = this.currentSpeed * this._cameraValues.zoomMultiplier;
@@ -50,33 +74,39 @@ public class PlayerUpdate : MonoBehaviour
         this.cam.orthographicSize = Mathf.SmoothDamp(this.cam.orthographicSize, this.currentZoom, ref this.velocity, this._cameraValues.smoothTime);
         this.cam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10);
     }
-    private void UpdateNoDrill()
-    {
-        if (this.isGrounded) 
-        {
-            this._playerVelocity.x = 0;
-            this._playerVelocity.x += Input.GetAxis("Horizontal") * this._playerValues.speed;
-        }
-
-        this._playerVelocity.y += -this._playerValues.gravity * Time.deltaTime;
-
-        if (isGrounded && this._playerVelocity.y < 0) { this._playerVelocity.y = 0; }
-        this.transform.position += this._playerVelocity * Time.deltaTime;
-    }
     private void UpdateInGroundDrill()
     {
         if (this._playerValues.acceleration != 0 && this._playerValues.speed > 0 && this._playerValues.speed <= this._playerValues.maxSpeedInGround)
             this.currentSpeed *= this._playerValues.acceleration;
+
+        if (Input.GetButton("Fire2") && this.isInGround)
+        {
+            this.braking.Invoke();
+            this.currentSpeed *= this._playerValues.BrakeDecelleration;
+        }
     }
     private void UpdateOutofGroundDrill()
     {
-        this._playerVelocity.y += (-this._playerValues.gravity) * Time.deltaTime;
-
+        if (Input.GetButton("Glider") && this.GliderTime < this._playerValues.GliderTimeLimit)
+        {
+            this._playerVelocity.y = -this._playerValues.Glidergravity;
+            this.GliderTime += Time.deltaTime;
+            this.GliderMode.Invoke();
+            this.Glider.SetActive(true);
+            this.Glider.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 0.75f, this.transform.position.z);
+        }
+        else 
+        {
+            this._playerVelocity.y += (-this._playerValues.gravity) * Time.deltaTime;
+            this.Glider.SetActive(false);
+            if (this._playerVelocity.y < 0)
+                this.currentSpeed *= this._playerValues.AirAcceleration;
+        }
+            
         if(this.currentSpeed > this._playerValues.minSpeedInAir && this._playerVelocity.y > 0)
             this.currentSpeed *= this._playerValues.AirDecelleration;
 
-        if (this._playerVelocity.y < 0)
-            this.currentSpeed *= this._playerValues.AirAcceleration;
+        this._playerVelocity.x = Input.GetAxis("Horizontal") * this._playerValues.MovementSpeedInAir;
     }
     private void JoystickHandler()
     {
@@ -128,7 +158,7 @@ public class PlayerUpdate : MonoBehaviour
             this.currentSpeed = this._playerValues.maxSpeedInGround;
 
         if (this.isBoosting && this.BoostTime < this._playerValues.boostTimeLimit)
-            this.currentSpeed *= this.boostAccelerationUpdtated;
+            this.currentSpeed = this.boostBeforeSpeed  + (this.boostAccelerationUpdtated * this._playerValues.boostCurve.Evaluate(this.BoostTime));
 
         if (this.isInGround) { this.UpdateInGroundDrill(); }
         else { this.UpdateOutofGroundDrill(); }
@@ -142,45 +172,17 @@ public class PlayerUpdate : MonoBehaviour
 
         this.transform.position += this._playerVelocity * Time.deltaTime;
     }
-    public void switchToBaseMode()
-    {
-        Debug.Log("SWITCH TO BASE");
-        this.DrillMode = false;
-        this.isGrounded = false;
-        this._playerCollider.isTrigger = false;
-        transform.rotation = Quaternion.Euler(0, 0, 0);
-        this.Hook.SetActive(false);
-        this.changeTime = 0;
-        this.currentSpeed = this._playerValues.minSpeedInGround;
-    }   
     private void inputHandler()
     {
-        if (Input.GetButton("Fire2") && this.changeTime >= this._playerValues.changeTimeLimit)
-        {
-            if (this.DrillMode && !this.isInGround)
-            {
-                Debug.Log("SWITCH WITH INPUT TO BASE");
-                this.switchToBaseMode();
-                return;
-            }
-
-            if (!this.DrillMode && this.isGrounded)
-            {
-                this.vibrating = true;
-                this.isInGround = true;
-                this.DrillMode = true;
-                this._playerCollider.isTrigger = true;
-                this.Hook.SetActive(true);
-                Debug.Log("SWITCH TO DRILL");
-                this.changeTime = 0;
-            }
-        }
+        //if (Input.GetButton("Fire1") && !this.isInGround && this.hookcd > this.hookedMaxcd)
+        //{
+        //    this.isHooked = !this.isHooked;
+        //    FollowingTrail.isHooked = this.isHooked;
+        //}
+           
     }
     private void CoolDownUpdate()
     {
-        if (this.changeTime <= this._playerValues.changeTimeLimit + 0.5f)
-            this.changeTime += Time.deltaTime;
-
         if (this.isBoosting && this.BoostTime < this._playerValues.boostTimeLimit + 0.5f)
             this.BoostTime += Time.deltaTime;
 
@@ -199,7 +201,9 @@ public class PlayerUpdate : MonoBehaviour
             this.vibratingTime = 0;
             Gamepad.current.SetMotorSpeeds(0, 0);
         }
-            
+
+        if (this.hookcd < this.hookedMaxcd + 0.5f)
+            this.hookcd += Time.deltaTime;
 
     }
     void Start()
@@ -207,23 +211,22 @@ public class PlayerUpdate : MonoBehaviour
         Physics2D.IgnoreLayerCollision(7, 3, true);
 
         this.currentSpeed = this._playerValues.speed;
-        this.isGrounded = false;
         this.prevAngle = -90;
-        this.Hook.SetActive(false);
         this.currentZoom = this._cameraValues.maximumZoom;
         this.vibrating = false;
+        this.hookcd = 0;
+        this.hookedMaxcd = 1f;
     }
     void Update()
     {
         this.CoolDownUpdate();
         this.inputHandler();
 
-        this.SpeedText.text = "Speed : " + string.Format("{0:0.00}", this.currentSpeed);
-        this.TurningTimeText.text = "TurningTime : " + string.Format("{0:0.00}", this.turningTime);
+        //this.SpeedText.text = "Speed : " + string.Format("{0:0.00}", this.currentSpeed);
+        //this.TurningTimeText.text = "TurningTime : " + string.Format("{0:0.00}", this.turningTime);
 
-        if (!this.DrillMode) { this.UpdateNoDrill(); } 
-
-        if (this.DrillMode) { this.UpdateWithDrill(); }
+        if (!this.isHooked) { this.UpdateWithDrill(); }
+        else if (this.isHooked) { this.UpdateHooked(); }
 
         if (this.vibrating)
             Gamepad.current.SetMotorSpeeds(this._playerValues.LowVibration, this._playerValues.HighVibration);
@@ -232,55 +235,41 @@ public class PlayerUpdate : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("ENTER " + collision.tag);
-        
-        if (this.DrillMode && collision.CompareTag("Ground")) 
+        Debug.Log("ENTER COLLISION " + collision.tag);
+
+        if (collision.CompareTag("Ground")) 
         {
             this.isInGround = true;
             collision.isTrigger = true;
+            this.enterGround.Invoke();
+            this.GliderTime = 0;
+            this.Glider.SetActive(false);
         }
-        else if (this.DrillMode && collision.CompareTag("Rope") && !isBoosting)
+        else if (collision.CompareTag("Rope") && !isBoosting)
         {
+            this.RopeCollide.Invoke();
+            this.boostBeforeSpeed = this.currentSpeed;
             this.vibrating = true;
-          
             this.isBoosting = true;
             float ratio =  this.turningTime / this._playerValues.MaxLoopTime;
 
             if (ratio > 1) { ratio = 1; }
 
-            this.boostAccelerationUpdtated = (this._playerValues.MaxboostAcceleration - 1) * ratio;
+            this.boostAccelerationUpdtated = this. _playerValues.MaxboostAcceleration  * ratio;
 
-            this.boostAccelerationUpdtated += 1;
-
-            onBoost.Invoke();
+            if(boostAccelerationUpdtated < this._playerValues.MinBoostAcceleration)
+                this.boostAccelerationUpdtated = this._playerValues.MinBoostAcceleration;
 
             this.turningTime = 0;
-
         }
-        else if (!this.DrillMode) { Debug.Log(" NO DRILL"); }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("EXIT " + collision.tag);
-
-        if (this.DrillMode && collision.CompareTag("Ground")) 
+        if (collision.CompareTag("Ground")) 
         {
             this.isInGround = false;
             collision.isTrigger = false;
+            this.exitGround.Invoke();
         }
-        else if (!this.DrillMode) { Debug.Log(" NO DRILL"); }
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (this.DrillMode) 
-        { 
-            Debug.Log("DRILL"); 
-        }
-        else if (!this.DrillMode) 
-        {
-            this.isGrounded = true;
-        }
-
-        
     }
 }
