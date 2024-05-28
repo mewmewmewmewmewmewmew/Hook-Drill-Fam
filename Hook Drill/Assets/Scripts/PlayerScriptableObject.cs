@@ -17,6 +17,7 @@ public class PlayerScriptableObject : ScriptableObject
     [Tooltip("This is how much player speed player loose every frame while he's in the air")][Range(0.9f, 1f)] public float AirDecelleration;
     [Tooltip("This is how much player speed player gain while he's falling")][Range(1f, 1.1f)] public float AirAcceleration;
     [Tooltip("This is the maximum amount of acceleration the player can get while boosting")][Range(1f, 3f)] public float MaxboostAcceleration;
+    [Tooltip("This is curve to control the dash decceleration")]public AnimationCurve MaxboostCurve;
 
     [Header("CoolDown")]
     [Tooltip("This is the minimum time between switching the two modes")][Range(0f, 3f)] public float changeTimeLimit;

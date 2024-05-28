@@ -5,7 +5,6 @@ using UnityEngine.Events;
 
 public class PlayerUpdate : MonoBehaviour
 {
-
     public UnityEvent onBoost;
     public PlayerScriptableObject _playerValues;
     public CameraObject _cameraValues;
@@ -243,7 +242,7 @@ public class PlayerUpdate : MonoBehaviour
         else if (this.DrillMode && collision.CompareTag("Rope") && !isBoosting)
         {
             this.vibrating = true;
-            this.turningTime = 0;
+          
             this.isBoosting = true;
             float ratio =  this.turningTime / this._playerValues.MaxLoopTime;
 
@@ -254,6 +253,8 @@ public class PlayerUpdate : MonoBehaviour
             this.boostAccelerationUpdtated += 1;
 
             onBoost.Invoke();
+
+            this.turningTime = 0;
 
         }
         else if (!this.DrillMode) { Debug.Log(" NO DRILL"); }

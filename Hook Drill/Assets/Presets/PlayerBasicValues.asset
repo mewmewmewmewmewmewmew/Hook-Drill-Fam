@@ -21,10 +21,43 @@ MonoBehaviour:
   AirDecelleration: 0.997
   AirAcceleration: 1.003
   MaxboostAcceleration: 1.001
+  MaxboostCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.06815869
+      value: 0.9057365
+      inSlope: 2.380412
+      outSlope: 2.380412
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.8218921
+      outWeight: 0.32419607
+    - serializedVersion: 3
+      time: 1
+      value: 0.19900495
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   changeTimeLimit: 0.5
   boostTimeLimit: 2
   MaxLoopTime: 1.5
-  VibrationTimeLinit: 3
+  VibrationTimeLinit: 0.7
   gravity: 2
-  HighVibration: 1
-  LowVibration: 1
+  HighVibration: 0.45
+  LowVibration: 0.055
