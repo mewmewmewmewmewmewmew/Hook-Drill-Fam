@@ -5416,7 +5416,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &892362155485580435
 Transform:
   m_ObjectHideFlags: 0
@@ -5865,6 +5865,7 @@ GameObject:
   - component: {fileID: 7874792769278104847}
   - component: {fileID: 7874792769278104846}
   - component: {fileID: 7874792769278104845}
+  - component: {fileID: 1725556373185920796}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -5985,6 +5986,7 @@ MonoBehaviour:
   _cameraValues: {fileID: 11400000, guid: 2049a03c0b00a22448c610aad62e423c, type: 2}
   cam: {fileID: 0}
   _playerCollider: {fileID: 7874792769278104847}
+  _playerJoint: {fileID: 1725556373185920796}
   Objdirection: {fileID: 7874792769735252073}
   Hook: {fileID: 2178906212290275625}
   Glider: {fileID: 4183943729622631499}
@@ -6081,6 +6083,30 @@ MonoBehaviour:
   wiggleSpeed: 0
   wiggleMagnitude: 0
   ExtendingDistance: 0.001
+--- !u!233 &1725556373185920796
+HingeJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7874792769278104844}
+  m_Enabled: 0
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 1
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: -7.4700003, y: 6.16}
+  m_UseMotor: 0
+  m_Motor:
+    m_MotorSpeed: 0
+    m_MaximumMotorForce: 10000
+  m_UseLimits: 0
+  m_AngleLimits:
+    m_LowerAngle: 0
+    m_UpperAngle: 359
 --- !u!1 &7874792769581023539
 GameObject:
   m_ObjectHideFlags: 0
