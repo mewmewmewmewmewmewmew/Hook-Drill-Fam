@@ -53,7 +53,7 @@ public class FollowingTrail : MonoBehaviour
             this.RetractRope.Invoke();
         }
     }
-    void LateUpdate()
+    void LateUpdate()   
     {
         this.InputHandler();
 
@@ -64,10 +64,7 @@ public class FollowingTrail : MonoBehaviour
         for (int i = 1; i < segmentPoses.Length; i++)
         {
             if (i == segmentPoses.Length - 1 && isHooked)
-            {
-                Debug.Log("skip the last one");
                 continue;
-            }
                 
 
             if (i == 1)

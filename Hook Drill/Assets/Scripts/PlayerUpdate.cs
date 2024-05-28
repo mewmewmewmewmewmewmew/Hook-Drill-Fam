@@ -18,6 +18,8 @@ public class PlayerUpdate : MonoBehaviour
     public Camera cam;
 
     public BoxCollider2D _playerCollider;
+    public HingeJoint2D _playerJoint;
+    public Rigidbody2D _playerRigidbody;
 
     public GameObject Objdirection;
     public GameObject Hook;
@@ -41,28 +43,18 @@ public class PlayerUpdate : MonoBehaviour
     private float currentZoom;
     private float velocity;
     private float vibratingTime;
-    private float hookcd;
+    private float hookCd;
     private float hookedMaxcd;
     private float GliderTime;
 
     static public float maxdistance;
 
     private Vector3 _playerVelocity;
-    private Vector3 futurPos;
     private Vector2 joyPos;
     private Vector2 PrevJoyPos;
 
     private void UpdateHooked()
     {
-        this.UpdateOutofGroundDrill();
-
-        this.futurPos = this.transform.position + this._playerVelocity * Time.deltaTime;
-
-        float distance = Vector3.Distance(futurPos, Hook.transform.position);
-        if ( distance < maxdistance)
-            this.transform.position = futurPos;
-
-        Debug.Log(distance);
     }
     private void UpdateCamera()
     {
@@ -111,8 +103,10 @@ public class PlayerUpdate : MonoBehaviour
 
         float horizontalinput = Input.GetAxis("Horizontal");
 
+        //if(horizontalinput != 0 && this.isBoosting)
+        //    this._playerVelocity.x +=  horizontalinput * (this._playerValues.MovementSpeedInAir * this.boostAccelerationUpdtated) * Time.deltaTime;
         if(horizontalinput != 0)
-            this._playerVelocity.x +=  horizontalinput * this._playerValues.MovementSpeedInAir * Time.deltaTime;
+            this._playerVelocity.x += horizontalinput * this._playerValues.MovementSpeedInAir * Time.deltaTime;
     }
     private void JoystickHandler()
     {
@@ -180,12 +174,30 @@ public class PlayerUpdate : MonoBehaviour
     }
     private void inputHandler()
     {
-        //if (Input.GetButton("Fire1") && !this.isInGround && this.hookcd > this.hookedMaxcd)
-        //{
-        //    this.isHooked = !this.isHooked;
-        //    FollowingTrail.isHooked = this.isHooked;
-        //}
-           
+        if (Input.GetButton("Fire1") && !this.isInGround && this.hookCd > this.hookedMaxcd)
+        {
+            if(!this.isHooked)
+            {
+                this.isHooked = true;
+                FollowingTrail.isHooked = this.isHooked;
+                this.hookCd = 0;
+                _playerJoint.connectedAnchor = new Vector2(this.Hook.transform.position.x, this.Hook.transform.position.y);
+                //_playerJoint.anchor = new Vector2(maxdistance, 0); 
+                Debug.Log(this.Hook.transform.position);
+                _playerJoint.enabled = true;
+                this._playerRigidbody.gravityScale = 1;
+            }
+            else if (this.isHooked)
+            {
+                this._playerRigidbody.gravityScale = 0;
+                this.hookCd = 0;
+                this.isHooked = false;
+                _playerJoint.enabled = false;
+                FollowingTrail.isHooked = this.isHooked;
+            }
+
+        }
+
     }
     private void CoolDownUpdate()
     {
@@ -208,8 +220,8 @@ public class PlayerUpdate : MonoBehaviour
             Gamepad.current.SetMotorSpeeds(0, 0);
         }
 
-        if (this.hookcd < this.hookedMaxcd + 0.5f)
-            this.hookcd += Time.deltaTime;
+        if (this.hookCd < this.hookedMaxcd + 0.5f)
+            this.hookCd += Time.deltaTime;
 
     }
     void Start()
@@ -220,8 +232,10 @@ public class PlayerUpdate : MonoBehaviour
         this.prevAngle = -90;
         this.currentZoom = this._cameraValues.maximumZoom;
         this.vibrating = false;
-        this.hookcd = 0;
+        this.hookCd = 0;
         this.hookedMaxcd = 1f;
+        this._playerJoint.enabled = false;
+        this.isInGround = false;    
     }
     void Update()
     {

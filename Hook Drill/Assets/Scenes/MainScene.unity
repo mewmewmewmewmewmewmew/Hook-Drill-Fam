@@ -375,6 +375,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &316341444 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 7874792769278104846, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+  m_PrefabInstance: {fileID: 7874792770148019320}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &718347128
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,6 +939,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1725556373185920796, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_AutoConfigureConnectedAnchor
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2578131324156047384, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -1046,9 +1055,25 @@ PrefabInstance:
       propertyPath: TurningTimeText
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7874792769278104832, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: _playerRigidbody
+      value: 
+      objectReference: {fileID: 316341444}
+    - target: {fileID: 7874792769278104834, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 26.87
+      objectReference: {fileID: 0}
     - target: {fileID: 7874792769278104845, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
       propertyPath: targetDist
       value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769278104846, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769278104846, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_GravityScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7874792769278104847, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
       propertyPath: m_Size.x
