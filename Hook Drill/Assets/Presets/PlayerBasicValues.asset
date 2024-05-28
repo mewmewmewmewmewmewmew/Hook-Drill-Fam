@@ -17,7 +17,7 @@ MonoBehaviour:
   minSpeedInGround: 3
   minSpeedInAir: 1
   rotationSpeed: 1.5
-  MovementSpeedInAir: 2
+  MovementSpeedInAir: 5
   boostCurve:
     serializedVersion: 2
     m_Curve:

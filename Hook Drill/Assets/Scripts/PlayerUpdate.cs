@@ -103,9 +103,9 @@ public class PlayerUpdate : MonoBehaviour
 
         float horizontalinput = Input.GetAxis("Horizontal");
 
-        //if(horizontalinput != 0 && this.isBoosting)
-        //    this._playerVelocity.x +=  horizontalinput * (this._playerValues.MovementSpeedInAir * this.boostAccelerationUpdtated) * Time.deltaTime;
-        if(horizontalinput != 0)
+        if (horizontalinput != 0 && this.isBoosting)
+            this._playerVelocity.x += horizontalinput * (this._playerValues.MovementSpeedInAir * this.boostAccelerationUpdtated) * Time.deltaTime;
+        if (horizontalinput != 0)
             this._playerVelocity.x += horizontalinput * this._playerValues.MovementSpeedInAir * Time.deltaTime;
     }
     private void JoystickHandler()
