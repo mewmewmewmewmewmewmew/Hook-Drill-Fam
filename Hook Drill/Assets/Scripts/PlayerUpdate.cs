@@ -231,7 +231,7 @@ public class PlayerUpdate : MonoBehaviour
         if (!this.isHooked) { this.UpdateWithDrill(); }
         else if (this.isHooked) { this.UpdateHooked(); }
 
-        if (this.vibrating)
+        if (this.vibrating && Gamepad.current != null)
             Gamepad.current.SetMotorSpeeds(this._playerValues.LowVibration, this._playerValues.HighVibration);
 
         this.UpdateCamera();
