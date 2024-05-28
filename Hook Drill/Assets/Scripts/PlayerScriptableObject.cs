@@ -17,7 +17,7 @@ public class PlayerScriptableObject : ScriptableObject
     [Header("Update Speed")]
     [Tooltip("This is how much the player accelerate while he's in ground")][Range(1f, 1.05f)] public float acceleration;
     [Tooltip("This is how much player speed player loose every frame while he's in the air")][Range(0.9f, 1f)] public float AirDecelleration;
-    [Tooltip("This is how much player speed player loose every frame while he's breaking")][Range(0.9f, 1f)] public float BreakDecelleration;
+    [Tooltip("This is how much player speed player loose every frame while he's breaking")][Range(0.9f, 1f)] public float BrakeDecelleration;
     [Tooltip("This is how much player speed player gain while he's falling")][Range(1f, 1.1f)] public float AirAcceleration;
     [Tooltip("This is the maximum amount of acceleration the player can get while boosting")][Range(1f, 5f)] public float MinBoostAcceleration;
     [Tooltip("This is the maximum amount of acceleration the player can get while boosting")][Range(3f, 10f)] public float MaxboostAcceleration;

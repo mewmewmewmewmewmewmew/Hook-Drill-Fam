@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class PlayerUpdate : MonoBehaviour
 {
-    public UnityEvent breaking;
+    public UnityEvent braking;
     public UnityEvent enterGround;
     public UnityEvent exitGround;
     public UnityEvent RopeCollide;
@@ -81,8 +81,8 @@ public class PlayerUpdate : MonoBehaviour
 
         if (Input.GetButton("Fire2") && this.isInGround)
         {
-            breaking.Invoke();
-            this.currentSpeed *= this._playerValues.BreakDecelleration;
+            this.braking.Invoke();
+            this.currentSpeed *= this._playerValues.BrakeDecelleration;
         }
     }
     private void UpdateOutofGroundDrill()
