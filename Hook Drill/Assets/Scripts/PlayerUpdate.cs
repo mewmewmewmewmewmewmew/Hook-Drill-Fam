@@ -79,11 +79,14 @@ public class PlayerUpdate : MonoBehaviour
         if (this._playerValues.acceleration != 0 && this._playerValues.speed > 0 && this._playerValues.speed <= this._playerValues.maxSpeedInGround)
             this.currentSpeed *= this._playerValues.acceleration;
 
-        if (Input.GetButton("Fire2") && this.isInGround)
+        if (Input.GetButton("Fire2") && this.isInGround && this.currentSpeed >= this._playerValues.minSpeedInGround)
         {
             this.braking.Invoke();
             this.currentSpeed *= this._playerValues.BrakeDecelleration;
         }
+
+        if(this.currentSpeed < this._playerValues.minSpeedInGround)
+            this.currentSpeed = this._playerValues.minSpeedInGround;
     }
     private void UpdateOutofGroundDrill()
     {
@@ -231,7 +234,7 @@ public class PlayerUpdate : MonoBehaviour
         if (!this.isHooked) { this.UpdateWithDrill(); }
         else if (this.isHooked) { this.UpdateHooked(); }
 
-        if (this.vibrating)
+        if (this.vibrating && Gamepad.current != null)
             Gamepad.current.SetMotorSpeeds(this._playerValues.LowVibration, this._playerValues.HighVibration);
 
         this.UpdateCamera();

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c35ba0c06bb156d41b0051600e8525b9, type: 3}
   m_Name: CameraBasicsValues
   m_EditorClassIdentifier: 
-  minimumZoom: 4.07
+  minimumZoom: 3
   maximumZoom: 6
   smoothTime: 0.25
-  zoomMultiplier: 0.461
+  zoomMultiplier: 0.5
