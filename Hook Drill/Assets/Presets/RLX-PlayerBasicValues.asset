@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3ba4da08500a1f4999ead1669785e2e, type: 3}
+  m_Name: RLX-PlayerBasicValues
+  m_EditorClassIdentifier: 
+  speed: 3
+  maxSpeedInGround: 17
+  minSpeedInGround: 2
+  minSpeedInAir: 1
+  rotationSpeed: 1.25
+  MovementSpeedInAir: 2
+  boostCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.531499
+      outSlope: 2.531499
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.22118357
+      value: 0.559926
+      inSlope: 2.0906858
+      outSlope: 2.0906858
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2641537
+      outWeight: 0.13715203
+    - serializedVersion: 3
+      time: 1.2745049
+      value: 1.4443475
+      inSlope: -0.602364
+      outSlope: -0.602364
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 2
+      value: 0.3000007
+      inSlope: -0.1738318
+      outSlope: -0.1738318
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13994083
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  acceleration: 1.00035
+  AirDecelleration: 0.997
+  BrakeDecelleration: 0
+  AirAcceleration: 1.002
+  MinBoostAcceleration: 3
+  MaxboostAcceleration: 10
+  GliderTimeLimit: 5
+  boostTimeLimit: 2
+  MaxLoopTime: 3
+  VibrationTimeLinit: 1
+  gravity: 7
+  Glidergravity: 1
+  HighVibration: 0.374
+  LowVibration: 0.383
