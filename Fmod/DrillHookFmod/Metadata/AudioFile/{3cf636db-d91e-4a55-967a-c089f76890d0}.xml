@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{3cf636db-d91e-4a55-967a-c089f76890d0}">
+		<property name="assetPath">
+			<value>BRS_Roomtone_Air_Suburb.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>70.240362811791385</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{6485f9be-4a33-42c9-a93b-9f0cc247ffdc}</destination>
+		</relationship>
+	</object>
+</objects>

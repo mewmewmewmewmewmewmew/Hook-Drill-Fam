@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{9aafe39a-6746-469a-b871-c7869f05267c}">
+		<property name="assetPath">
+			<value>BOFB_02_8bit_Coin_.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.99934240362811788</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{6485f9be-4a33-42c9-a93b-9f0cc247ffdc}</destination>
+		</relationship>
+	</object>
+</objects>

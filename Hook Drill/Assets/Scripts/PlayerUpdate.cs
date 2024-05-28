@@ -1,8 +1,17 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class PlayerUpdate : MonoBehaviour
 {
+    public UnityEvent braking;
+    public UnityEvent enterGround;
+    public UnityEvent exitGround;
+    public UnityEvent RopeCollide;
+    public UnityEvent GliderMode;
+
+
     public PlayerScriptableObject _playerValues;
     public CameraObject _cameraValues;
 
@@ -12,18 +21,17 @@ public class PlayerUpdate : MonoBehaviour
 
     public GameObject Objdirection;
     public GameObject Hook;
+    public GameObject Glider;
 
     //public Text SpeedText;
     //public Text TurningTimeText;
 
     private bool isHooked;
-    //private bool DrillMode;
-    public bool isInGround; //was private
+    private bool isInGround;
     private bool DirectionTurn;
     private bool isBoosting;
     private bool vibrating;
 
-    private float changeTime;
     private float currentSpeed;
     private float boostBeforeSpeed;
     private float prevAngle;
@@ -35,6 +43,7 @@ public class PlayerUpdate : MonoBehaviour
     private float vibratingTime;
     private float hookcd;
     private float hookedMaxcd;
+    private float GliderTime;
 
     static public float maxdistance;
 
@@ -55,7 +64,6 @@ public class PlayerUpdate : MonoBehaviour
 
         Debug.Log(distance);
     }
-    
     private void UpdateCamera()
     {
         this.currentZoom = this.currentSpeed * this._cameraValues.zoomMultiplier;
@@ -70,16 +78,35 @@ public class PlayerUpdate : MonoBehaviour
     {
         if (this._playerValues.acceleration != 0 && this._playerValues.speed > 0 && this._playerValues.speed <= this._playerValues.maxSpeedInGround)
             this.currentSpeed *= this._playerValues.acceleration;
+
+        if (Input.GetButton("Fire2") && this.isInGround)
+        {
+            this.braking.Invoke();
+            this.currentSpeed *= this._playerValues.BrakeDecelleration;
+        }
     }
     private void UpdateOutofGroundDrill()
     {
-        this._playerVelocity.y += (-this._playerValues.gravity) * Time.deltaTime;
-
+        if (Input.GetButton("Glider") && this.GliderTime < this._playerValues.GliderTimeLimit)
+        {
+            this._playerVelocity.y = -this._playerValues.Glidergravity;
+            this.GliderTime += Time.deltaTime;
+            this.GliderMode.Invoke();
+            this.Glider.SetActive(true);
+            this.Glider.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 0.75f, this.transform.position.z);
+        }
+        else 
+        {
+            this._playerVelocity.y += (-this._playerValues.gravity) * Time.deltaTime;
+            this.Glider.SetActive(false);
+            if (this._playerVelocity.y < 0)
+                this.currentSpeed *= this._playerValues.AirAcceleration;
+        }
+            
         if(this.currentSpeed > this._playerValues.minSpeedInAir && this._playerVelocity.y > 0)
             this.currentSpeed *= this._playerValues.AirDecelleration;
 
-        if (this._playerVelocity.y < 0)
-            this.currentSpeed *= this._playerValues.AirAcceleration;
+        this._playerVelocity.x = Input.GetAxis("Horizontal") * this._playerValues.MovementSpeedInAir;
     }
     private void JoystickHandler()
     {
@@ -147,18 +174,15 @@ public class PlayerUpdate : MonoBehaviour
     }
     private void inputHandler()
     {
-        if (Input.GetButton("Fire1") && !this.isInGround && this.hookcd > this.hookedMaxcd)
-        {
-            this.isHooked = !this.isHooked;
-            FollowingTrail.isHooked = this.isHooked;
-        }
+        //if (Input.GetButton("Fire1") && !this.isInGround && this.hookcd > this.hookedMaxcd)
+        //{
+        //    this.isHooked = !this.isHooked;
+        //    FollowingTrail.isHooked = this.isHooked;
+        //}
            
     }
     private void CoolDownUpdate()
     {
-        if (this.changeTime <= this._playerValues.changeTimeLimit + 0.5f)
-            this.changeTime += Time.deltaTime;
-
         if (this.isBoosting && this.BoostTime < this._playerValues.boostTimeLimit + 0.5f)
             this.BoostTime += Time.deltaTime;
 
@@ -201,8 +225,6 @@ public class PlayerUpdate : MonoBehaviour
         //this.SpeedText.text = "Speed : " + string.Format("{0:0.00}", this.currentSpeed);
         //this.TurningTimeText.text = "TurningTime : " + string.Format("{0:0.00}", this.turningTime);
 
-        //if (!this.DrillMode) { this.UpdateNoDrill(); }
-
         if (!this.isHooked) { this.UpdateWithDrill(); }
         else if (this.isHooked) { this.UpdateHooked(); }
 
@@ -219,9 +241,13 @@ public class PlayerUpdate : MonoBehaviour
         {
             this.isInGround = true;
             collision.isTrigger = true;
+            this.enterGround.Invoke();
+            this.GliderTime = 0;
+            this.Glider.SetActive(false);
         }
         else if (collision.CompareTag("Rope") && !isBoosting)
         {
+            this.RopeCollide.Invoke();
             this.boostBeforeSpeed = this.currentSpeed;
             this.vibrating = true;
             this.isBoosting = true;
@@ -243,6 +269,7 @@ public class PlayerUpdate : MonoBehaviour
         {
             this.isInGround = false;
             collision.isTrigger = false;
+            this.exitGround.Invoke();
         }
     }
 }
