@@ -106,7 +106,10 @@ public class PlayerUpdate : MonoBehaviour
         if(this.currentSpeed > this._playerValues.minSpeedInAir && this._playerVelocity.y > 0)
             this.currentSpeed *= this._playerValues.AirDecelleration;
 
-        this._playerVelocity.x = Input.GetAxis("Horizontal") * this._playerValues.MovementSpeedInAir;
+        float horizontalinput = Input.GetAxis("Horizontal");
+
+        if(horizontalinput != 0)
+            this._playerVelocity.x +=  horizontalinput * this._playerValues.MovementSpeedInAir * Time.deltaTime;
     }
     private void JoystickHandler()
     {
