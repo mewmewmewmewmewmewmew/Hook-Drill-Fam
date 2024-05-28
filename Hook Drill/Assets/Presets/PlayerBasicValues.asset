@@ -17,7 +17,7 @@ MonoBehaviour:
   minSpeedInGround: 2
   minSpeedInAir: 1
   rotationSpeed: 1.5
-  MovementSpeedInAir: 0
+  MovementSpeedInAir: 2
   boostCurve:
     serializedVersion: 2
     m_Curve:
@@ -53,13 +53,15 @@ MonoBehaviour:
     m_RotationOrder: 4
   acceleration: 1.00005
   AirDecelleration: 0.997
-  AirAcceleration: 1.002
+  BreakDecelleration: 0.997
+  AirAcceleration: 1.0015
   MinBoostAcceleration: 3
   MaxboostAcceleration: 10
-  changeTimeLimit: 0.5
+  GliderTimeLimit: 5
   boostTimeLimit: 2
   MaxLoopTime: 3
   VibrationTimeLinit: 1
-  gravity: 2
+  gravity: 3
+  Glidergravity: 1
   HighVibration: 0.374
   LowVibration: 0.383

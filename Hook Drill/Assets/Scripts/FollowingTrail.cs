@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FollowingTrail : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class FollowingTrail : MonoBehaviour
     public Transform[] bodyParts;
     public LineRenderer lineRend;
     public EdgeCollider2D myCollider;
+
+    public UnityEvent ExtendRope;
+    public UnityEvent RetractRope;
 
     public Vector3[] segmentPoses;
     private Vector3[] segmentV;
@@ -31,7 +35,6 @@ public class FollowingTrail : MonoBehaviour
         segmentV = new Vector3[length];
         PlayerUpdate.maxdistance = this.length * this.targetDist;
     }
-
     private void InputHandler()
     {
         float LeftInput = Input.GetAxis("TriggerLeft");
@@ -41,11 +44,13 @@ public class FollowingTrail : MonoBehaviour
         { 
             this.targetDist += ExtendingDistance * LeftInput; Debug.Log("Extend");
             PlayerUpdate.maxdistance = this.length * this.targetDist;
+            this.ExtendRope.Invoke();
         }
         if (RightInput != 0) 
         { 
             this.targetDist -= ExtendingDistance * RightInput; Debug.Log("No extend");
             PlayerUpdate.maxdistance = this.length * this.targetDist;
+            this.RetractRope.Invoke();
         }
     }
     void LateUpdate()
@@ -80,7 +85,6 @@ public class FollowingTrail : MonoBehaviour
         List<Vector2> points = new List<Vector2>();
         for (int position = 1; position < lineRend.positionCount; position++)
         {
-            //ignores z axis when translating vector3 to vector2
             points.Add(lineRend.GetPosition(position));
         }
 

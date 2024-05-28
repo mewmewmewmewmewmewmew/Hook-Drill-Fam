@@ -986,6 +986,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4183943729622631499, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_Name
+      value: Glider
+      objectReference: {fileID: 0}
     - target: {fileID: 4263301679289968097, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4
