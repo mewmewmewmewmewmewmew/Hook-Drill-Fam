@@ -62,7 +62,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   acceleration: 1.00035
   AirDecelleration: 0.997
-  BrakeDecelleration: 0
+  BrakeDecelleration: 0.997
   AirAcceleration: 1.002
   MinBoostAcceleration: 3
   MaxboostAcceleration: 10
