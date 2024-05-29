@@ -185,7 +185,7 @@ public class PlayerUpdate : MonoBehaviour
                 //_playerJoint.anchor = new Vector2(maxdistance, 0); 
                 Debug.Log(this.Hook.transform.position);
                 _playerJoint.enabled = true;
-                this._playerRigidbody.gravityScale = 1;
+                if (this._playerRigidbody !=null) { this._playerRigidbody.gravityScale = 1; }
             }
             else if (this.isHooked)
             {
