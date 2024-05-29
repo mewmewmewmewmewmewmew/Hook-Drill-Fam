@@ -74,7 +74,7 @@ public class FollowingTrail : MonoBehaviour
 
             Vector3 targetPos = segmentPoses[i - 1] + (segmentPoses[i] - segmentPoses[i - 1]).normalized * tempDist;
             segmentPoses[i] = Vector3.SmoothDamp(segmentPoses[i], targetPos, ref segmentV[i], smoothSpeed);
-            bodyParts[i - 1].position = segmentPoses[i];
+            bodyParts[i - 1].position = new Vector3(segmentPoses[i].x, segmentPoses[i].y, -4);
         }
 
         lineRend.SetPositions(segmentPoses);

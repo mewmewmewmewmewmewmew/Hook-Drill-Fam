@@ -5280,6 +5280,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1393858605 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 7874792769278104846, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+  m_PrefabInstance: {fileID: 7874792770148019320}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1459390603
 GameObject:
   m_ObjectHideFlags: 0
@@ -7877,9 +7882,21 @@ PrefabInstance:
       propertyPath: TurningTimeText
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7874792769278104832, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: _playerRigidbody
+      value: 
+      objectReference: {fileID: 1393858605}
     - target: {fileID: 7874792769278104845, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
       propertyPath: targetDist
       value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769278104845, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: wiggleSpeed
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769278104845, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: wiggleMagnitude
+      value: 0.39
       objectReference: {fileID: 0}
     - target: {fileID: 7874792769278104847, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
       propertyPath: m_Size.x
@@ -7920,6 +7937,30 @@ PrefabInstance:
     - target: {fileID: 7874792769822476678, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769936773145, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769936773145, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -402880235
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769936773145, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_Parameters.numCapVertices
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769936773145, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_Parameters.numCornerVertices
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769936773145, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0.0036319615
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874792769936773145, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.1186472
       objectReference: {fileID: 0}
     - target: {fileID: 7874792770134547353, guid: b49f9bf40bc7e0b4294a44d4fbfc7d5d, type: 3}
       propertyPath: m_LocalPosition.x
